@@ -1,5 +1,7 @@
 # ComfyUI SAM + WeVisOne-VL Recovery
 
+**中文** | [English](README_EN.md)
+
 **ComfyUI 人物跟踪丢失后自动找回：WeVisOne-VL 4B 识别目标，SAM3 继续跟踪。**
 
 一个 ComfyUI 人物替换工作流：用 WeVisOne-VL 指定目标，SAM3 生成视频蒙版；当蒙版连续为空时，尝试用 WeVisOne 找回目标，再从找回的帧重新运行 SAM3。示例工作流可将蒙版用于 MiniMax H3 人物替换。
