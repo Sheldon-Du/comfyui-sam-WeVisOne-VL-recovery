@@ -1,0 +1,14 @@
+ComfyUI-WeVisOne
+Copyright 2026 ComfyUI-WeVisOne contributors.
+
+This is an independent ComfyUI integration, not an official Tencent repository.
+
+This product includes code from Tencent/WeVisOne-VL:
+Copyright (C) 2026 Tencent. All rights reserved.
+Released under the Apache License, Version 2.0.
+
+Original notices are retained in vendor/LICENSE-Tencent and the vendored sources.
+See THIRD_PARTY.md for revisions, modifications and attribution.
+
+Model weights are not included. Download them from their official repositories
+and retain the licenses accompanying those artifacts.

@@ -1,0 +1,45 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "wevisone_seabreeze_example.jpg"
+    }
+  },
+  "2": {
+    "class_type": "WeVisOnePerception",
+    "inputs": {
+      "images": [
+        "1",
+        0
+      ],
+      "model_name": "wevisone/WeVisOne-VL-2B",
+      "task": "detection",
+      "query": "person\nsunglasses",
+      "device": "auto",
+      "dtype": "bfloat16",
+      "max_pixels": 1048576,
+      "max_new_tokens": 4096,
+      "decoder_batch_size": 1,
+      "temperature": 0.0,
+      "seed": 0
+    }
+  },
+  "3": {
+    "class_type": "PreviewImage",
+    "inputs": {
+      "images": [
+        "2",
+        0
+      ]
+    }
+  },
+  "7": {
+    "class_type": "PreviewAny",
+    "inputs": {
+      "source": [
+        "2",
+        4
+      ]
+    }
+  }
+}

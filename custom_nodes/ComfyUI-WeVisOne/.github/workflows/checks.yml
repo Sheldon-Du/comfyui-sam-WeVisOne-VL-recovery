@@ -1,0 +1,61 @@
+name: Source checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '22'
+      - name: Validate sources, upstream hashes and example links
+        shell: bash
+        run: |
+          python - <<'PY'
+          import ast
+          import hashlib
+          import json
+          from pathlib import Path
+          import subprocess
+          import tomllib
+
+          root = Path.cwd()
+          files = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+          files = [name for name in files if name]
+          for name in files:
+              path = root / name
+              assert path.is_file(), name
+              assert path.suffix not in {'.pt', '.pth', '.safetensors', '.gguf', '.pyc', '.npy', '.npz', '.zip'}, name
+              if path.suffix == '.py':
+                  ast.parse(path.read_text(encoding='utf-8-sig'), filename=name)
+              elif path.suffix == '.json':
+                  json.loads(path.read_text(encoding='utf-8-sig'))
+          tomllib.loads((root / 'pyproject.toml').read_text(encoding='utf-8'))
+          for item in json.loads((root / 'vendor/provenance.json').read_text()):
+              assert hashlib.sha256((root / item['path']).read_bytes()).hexdigest() == item['sha256'], item['path']
+          for path in (root / 'examples').glob('*.api.json'):
+              prompt = json.loads(path.read_text())
+              for node in prompt.values():
+                  for value in node['inputs'].values():
+                      if isinstance(value, list):
+                          assert len(value) == 2 and str(value[0]) in prompt and isinstance(value[1], int), path
+          print(f'Checked {len(files)} source files and five example prompts.')
+          PY
+      - name: Check frontend syntax
+        run: |
+          node --check js/box_editor.js
+          node --check js/box_preview.js

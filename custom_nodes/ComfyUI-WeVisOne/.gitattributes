@@ -1,0 +1,7 @@
+* text=auto eol=lf
+# Preserve the exact bytes recorded in vendor/provenance.json.
+vendor/** -text
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary

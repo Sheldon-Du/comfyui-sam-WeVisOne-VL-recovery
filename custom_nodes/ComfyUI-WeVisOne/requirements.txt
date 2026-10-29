@@ -1,0 +1,10 @@
+# Reuse ComfyUI's Torch, NumPy, Pillow, safetensors and Transformers stack.
+# Qwen3-VL requires Transformers >=4.57; see the compatibility notes before changing it.
+# These are additional dependencies, not a replacement for ComfyUI/requirements.txt.
+accelerate>=1.0
+supervision>=0.6
+opencv-python>=4.8,<4.12
+matplotlib>=3.6
+hydra-core>=1.3.2
+iopath>=0.1.10
+# SAM-2 is optional, required only by Mask2Alpha; see README.md.

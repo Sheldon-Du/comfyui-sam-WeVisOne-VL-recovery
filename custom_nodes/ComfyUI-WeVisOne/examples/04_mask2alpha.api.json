@@ -1,0 +1,78 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "wevisone_seabreeze_example.jpg"
+    }
+  },
+  "2": {
+    "class_type": "WeVisOneMask2Alpha",
+    "inputs": {
+      "images": [
+        "1",
+        0
+      ],
+      "sam2_checkpoint": "wevisone/Mask2Alpha/sam2.1_hiera_base_plus.pt",
+      "mode": "bbox",
+      "bboxes": [
+        "8",
+        0
+      ],
+      "mask_threshold": 0.0,
+      "device": "auto",
+      "precision": "bf16",
+      "positive_coords": "[]",
+      "negative_coords": "[]"
+    }
+  },
+  "4": {
+    "class_type": "InvertMask",
+    "inputs": {
+      "mask": [
+        "2",
+        0
+      ]
+    }
+  },
+  "5": {
+    "class_type": "JoinImageWithAlpha",
+    "inputs": {
+      "image": [
+        "1",
+        0
+      ],
+      "alpha": [
+        "4",
+        0
+      ]
+    }
+  },
+  "6": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "5",
+        0
+      ],
+      "filename_prefix": "WeVisOne/mask2alpha"
+    }
+  },
+  "7": {
+    "class_type": "PreviewAny",
+    "inputs": {
+      "source": [
+        "2",
+        2
+      ]
+    }
+  },
+  "8": {
+    "class_type": "PrimitiveBoundingBox",
+    "inputs": {
+      "x": 15,
+      "y": 70,
+      "width": 1200,
+      "height": 1010
+    }
+  }
+}

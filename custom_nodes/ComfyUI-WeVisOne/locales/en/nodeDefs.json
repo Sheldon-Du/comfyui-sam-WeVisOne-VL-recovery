@@ -1,0 +1,170 @@
+{
+  "WeVisOnePerception": {
+    "display_name": "WeVisOne · Unified Perception",
+    "description": "Detection, OCR, segmentation and alpha matting with the official WeVisOne-VL model.",
+    "inputs": {
+      "images": {
+        "name": "Images",
+        "tooltip": "Input images. A batch is processed one image at a time."
+      },
+      "model_name": {
+        "name": "Model",
+        "tooltip": "Select a complete local model directory, including mask_decoder.pt. See README for downloads."
+      },
+      "task": {
+        "name": "Task",
+        "tooltip": "Choose the perception task. Task values are stable identifiers used by saved workflows."
+      },
+      "query": {
+        "name": "Query",
+        "tooltip": "One category per line, or a complete referring expression. In freeform mode, this is the raw prompt."
+      },
+      "device": {
+        "name": "Device",
+        "tooltip": "auto uses the device selected by ComfyUI; cpu forces CPU inference."
+      },
+      "dtype": {
+        "name": "dtype",
+        "tooltip": "Model computation precision. CPU inference uses float32."
+      },
+      "max_pixels": {
+        "name": "Max image pixels",
+        "tooltip": "Maximum image pixels used by the VLM processor. Higher values can use more VRAM."
+      },
+      "max_new_tokens": {
+        "name": "Max new Tokens",
+        "tooltip": "Maximum number of generated Tokens. Dense detections or OCR may need a higher limit."
+      },
+      "decoder_batch_size": {
+        "name": "Decoder batch size",
+        "tooltip": "Number of object masks decoded together. Lower values reduce peak VRAM use."
+      },
+      "temperature": {
+        "name": "Temperature",
+        "tooltip": "0 uses greedy decoding. Values above 0 enable random sampling."
+      },
+      "seed": {
+        "name": "Seed",
+        "tooltip": "Random seed for sampling. With temperature 0, greedy decoding does not use sampling randomness."
+      },
+      "bboxes": {
+        "name": "Boxes",
+        "tooltip": "Native pixel-space boxes. visual_prompt finds similar objects; box_matting mattes the supplied boxes."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Preview",
+        "tooltip": "Visualization of predicted boxes, points, labels and masks."
+      },
+      "1": {
+        "name": "Foreground MASK",
+        "tooltip": "One merged mask per input image. White is foreground; matting preserves continuous alpha."
+      },
+      "2": {
+        "name": "Boxes",
+        "tooltip": "Native pixel-space boxes, grouped by input image."
+      },
+      "3": {
+        "name": "Response",
+        "tooltip": "Unmodified model response, one string per input image."
+      },
+      "4": {
+        "name": "Result JSON",
+        "tooltip": "Structured coordinates, counts, prompt and response, one JSON string per input image."
+      },
+      "5": {
+        "name": "Instance MASKs",
+        "tooltip": "One instance MASK batch per image. It is empty when no instance is found; see instance_count in the JSON."
+      }
+    }
+  },
+  "WeVisOneMask2Alpha": {
+    "display_name": "WeVisOne · Mask2Alpha Matting",
+    "description": "Refine a coarse mask, box or point prompt into a continuous alpha matte using official Mask2Alpha.",
+    "inputs": {
+      "images": {
+        "name": "Images",
+        "tooltip": "Input images. A batch is processed one image at a time."
+      },
+      "sam2_checkpoint": {
+        "name": "SAM2 checkpoint",
+        "tooltip": "Official SAM2.1-B+ checkpoint. Its SHA256 is verified against the upstream value."
+      },
+      "mode": {
+        "name": "Prompt mode",
+        "tooltip": "mask refines a coarse mask; bbox uses one box per image; point uses positive and negative clicks."
+      },
+      "mask_threshold": {
+        "name": "Mask threshold",
+        "tooltip": "In mask mode, pixels above this threshold become foreground in the coarse prompt mask."
+      },
+      "device": {
+        "name": "Device",
+        "tooltip": "auto uses the device selected by ComfyUI; cpu forces CPU inference."
+      },
+      "precision": {
+        "name": "Precision",
+        "tooltip": "bf16 enables BF16 autocast on CUDA; fp32 uses full precision."
+      },
+      "mask": {
+        "name": "Coarse MASK",
+        "tooltip": "Required in mask mode. White is foreground. One mask may be shared across the image batch."
+      },
+      "bboxes": {
+        "name": "Box",
+        "tooltip": "Required in bbox mode: exactly one native pixel-space box per image."
+      },
+      "positive_coords": {
+        "name": "Positive points",
+        "tooltip": "Foreground clicks in KJNodes PointsEditor format: [{\"x\": 100, \"y\": 200}]. Coordinates are input-image pixels."
+      },
+      "negative_coords": {
+        "name": "Negative points",
+        "tooltip": "Background clicks in KJNodes PointsEditor format: [{\"x\": 100, \"y\": 200}]. Coordinates are input-image pixels."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Alpha",
+        "tooltip": "Continuous foreground alpha at the original image resolution."
+      },
+      "1": {
+        "name": "Prompt MASK",
+        "tooltip": "The binary prompt mask supplied to the refinement head."
+      },
+      "2": {
+        "name": "Result JSON",
+        "tooltip": "Prompt mode, image dimensions and timing, one JSON string per input image."
+      }
+    }
+  },
+  "WeVisOneBoxEditor": {
+    "display_name": "WeVisOne · Image Box Editor",
+    "description": "Connect an image and drag to draw boxes. Drag edges to resize; press Delete to remove the selected box. Coordinates map back to the original image.",
+    "inputs": {
+      "background": {
+        "name": "Image",
+        "tooltip": "Image shown on the canvas. The first image is displayed for a batch."
+      },
+      "width": {
+        "name": "Canvas width",
+        "tooltip": "Canvas width managed by the native editor. Output boxes are rescaled to the original image width."
+      },
+      "height": {
+        "name": "Canvas height",
+        "tooltip": "Canvas height managed by the native editor. Output boxes are rescaled to the original image height."
+      },
+      "editor_state": {
+        "name": "Boxes",
+        "tooltip": "Drag on the image to draw one or more boxes. Text, descriptions and colors are optional."
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Boxes",
+        "tooltip": "Native boxes mapped to original-image pixels. The same selection is shared across an image batch."
+      }
+    }
+  }
+}

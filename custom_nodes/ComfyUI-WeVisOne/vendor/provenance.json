@@ -1,0 +1,62 @@
+[
+  {
+    "path": "vendor/LICENSE-Tencent",
+    "sha256": "834de5e92ef0bd5da04fd6f2f455ff35ba82104ae250a0bf13542396b64ccce8"
+  },
+  {
+    "path": "vendor/mask2alpha/__init__.py",
+    "sha256": "caa1c6cc758fa29f2dfbde9d8f591bb264102f0c86bcd0bcdb5eb023b68e8812"
+  },
+  {
+    "path": "vendor/mask2alpha/matting_head.py",
+    "sha256": "79297fda9da3898d909b124bd8497dd15e6c8331f1d93ae4b0b6ef96991020f8"
+  },
+  {
+    "path": "vendor/mask2alpha/model.py",
+    "sha256": "f75dffeca1a6bbcaf484d087aec7e58d96628b8d295a622fb3c8582d334d0aff"
+  },
+  {
+    "path": "vendor/mask2alpha/predictor.py",
+    "sha256": "de23d3c49d753b305e374b0898fb334693c4a772fea3a7a1d6da36e2d2c3b5a7"
+  },
+  {
+    "path": "vendor/wevisone_vl/__init__.py",
+    "sha256": "d2d55b9a01e8325a069079cbd31856e24a923683bfa4d6365095b3fde573148f"
+  },
+  {
+    "path": "vendor/wevisone_vl/cli.py",
+    "sha256": "30e861022e9d8ec979a28ba7214f08e6bbc16fd276b3470b3ce0b76c0ad33a0b"
+  },
+  {
+    "path": "vendor/wevisone_vl/config.py",
+    "sha256": "e3ef5729adffd8d18267a9657b0ad802c1ab0fa85cf8511a3549e3b8cbc884b3"
+  },
+  {
+    "path": "vendor/wevisone_vl/decoder.py",
+    "sha256": "3114b5196cefc82c95fbf99b15b551758e6cdb7adcb6fe2d21b89109f14c1696"
+  },
+  {
+    "path": "vendor/wevisone_vl/engine.py",
+    "sha256": "46cd1de7e4d5d34eac7361644d829cc6dfc63703cef3479d3c1ee47170d9e1b6"
+  },
+  {
+    "path": "vendor/wevisone_vl/feature_bridge.py",
+    "sha256": "10324b32fb249eafe201ae3fd8da959eddf4a51cc58b09fd60c93ed683253596"
+  },
+  {
+    "path": "vendor/wevisone_vl/mask_decoder.py",
+    "sha256": "ce6b637cabcabf7339d92195df0df6df342bb61cdafbdcdc7d241b2a4ab7b37a"
+  },
+  {
+    "path": "vendor/wevisone_vl/msda.py",
+    "sha256": "46ef2b5e24396a2ae052892504a247cefa059a7dbc5a5632f2b602173fc1c608"
+  },
+  {
+    "path": "vendor/wevisone_vl/prompts.py",
+    "sha256": "723513c5381e9ccd14d9b366171e2a06380f5d7e07a3f6c0c17e6535e2fb0ce9"
+  },
+  {
+    "path": "vendor/wevisone_vl/visualization.py",
+    "sha256": "83d775e441017aaf1b596ff4c68392ec4b857174e1205335aa409acea3c17425"
+  }
+]

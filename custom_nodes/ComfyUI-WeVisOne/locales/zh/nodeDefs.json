@@ -1,0 +1,170 @@
+{
+  "WeVisOnePerception": {
+    "display_name": "WeVisOne · 统一视觉感知",
+    "description": "使用官方 WeVisOne-VL 模型进行检测、OCR、分割和 alpha 抠图。",
+    "inputs": {
+      "images": {
+        "name": "图像",
+        "tooltip": "输入图像；图像批次会逐张处理。"
+      },
+      "model_name": {
+        "name": "模型",
+        "tooltip": "选择包含 mask_decoder.pt 的完整本地模型目录。下载方法见 README。"
+      },
+      "task": {
+        "name": "任务",
+        "tooltip": "选择视觉任务。选项值是保存工作流使用的固定标识符。"
+      },
+      "query": {
+        "name": "查询描述",
+        "tooltip": "类别每行一个；指代表达完整输入。freeform 时为原始提示词。"
+      },
+      "device": {
+        "name": "设备",
+        "tooltip": "auto 使用 ComfyUI 选择的设备；cpu 强制使用 CPU 推理。"
+      },
+      "dtype": {
+        "name": "dtype",
+        "tooltip": "模型计算精度；CPU 推理使用 float32。"
+      },
+      "max_pixels": {
+        "name": "最大图像像素数",
+        "tooltip": "VLM 图像处理器使用的最大像素数；增大此值可能增加 VRAM 占用。"
+      },
+      "max_new_tokens": {
+        "name": "最大生成 Token 数",
+        "tooltip": "最多生成的 Token 数；密集检测或 OCR 可能需要更高的上限。"
+      },
+      "decoder_batch_size": {
+        "name": "解码批量大小",
+        "tooltip": "同时解码的对象 MASK 数量；较小的值可降低峰值 VRAM 占用。"
+      },
+      "temperature": {
+        "name": "温度",
+        "tooltip": "0 使用 greedy 解码；大于 0 时启用随机采样。"
+      },
+      "seed": {
+        "name": "随机种子",
+        "tooltip": "用于随机采样；温度为 0 时，greedy 解码不使用采样随机性。"
+      },
+      "bboxes": {
+        "name": "边界框",
+        "tooltip": "原生像素坐标框。visual_prompt 查找相似物体；box_matting 对给定框抠图。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "预览",
+        "tooltip": "预测框、点、标签和 MASK 的可视化。"
+      },
+      "1": {
+        "name": "前景 MASK",
+        "tooltip": "每张输入对应一张合并 MASK；白色为前景，matting 保留连续 alpha。"
+      },
+      "2": {
+        "name": "边界框",
+        "tooltip": "按输入图像分组的原生像素坐标框。"
+      },
+      "3": {
+        "name": "原始回答",
+        "tooltip": "未经改写的模型回答；每张输入图像对应一个字符串。"
+      },
+      "4": {
+        "name": "结果 JSON",
+        "tooltip": "结构化坐标、计数、提示词和回答；每张输入图像对应一个 JSON 字符串。"
+      },
+      "5": {
+        "name": "逐实例 MASK",
+        "tooltip": "每张图像对应一个实例 MASK batch；无实例时为空 batch，实际数量见 JSON 的 instance_count。"
+      }
+    }
+  },
+  "WeVisOneMask2Alpha": {
+    "display_name": "WeVisOne · Mask2Alpha 精细抠图",
+    "description": "使用官方 Mask2Alpha，将粗 MASK、边界框或点击提示精修为连续 alpha。",
+    "inputs": {
+      "images": {
+        "name": "图像",
+        "tooltip": "输入图像；图像批次会逐张处理。"
+      },
+      "sam2_checkpoint": {
+        "name": "SAM2 checkpoint",
+        "tooltip": "官方 SAM2.1-B+ checkpoint，会按上游提供的 SHA256 校验。"
+      },
+      "mode": {
+        "name": "提示模式",
+        "tooltip": "mask 精修粗 MASK；bbox 每张图像使用一个框；point 使用正负点击。"
+      },
+      "mask_threshold": {
+        "name": "MASK 阈值",
+        "tooltip": "mask 模式下，大于此阈值的像素成为粗提示 MASK 的前景。"
+      },
+      "device": {
+        "name": "设备",
+        "tooltip": "auto 使用 ComfyUI 选择的设备；cpu 强制使用 CPU 推理。"
+      },
+      "precision": {
+        "name": "计算精度",
+        "tooltip": "bf16 在 CUDA 上启用 BF16 autocast；fp32 使用完整精度。"
+      },
+      "mask": {
+        "name": "粗 MASK",
+        "tooltip": "mask 模式需要连接；白色为前景。单张 MASK 可供整个图像批次共用。"
+      },
+      "bboxes": {
+        "name": "边界框",
+        "tooltip": "bbox 模式需要连接；每张图像恰好一个原生像素坐标框。"
+      },
+      "positive_coords": {
+        "name": "正向点击",
+        "tooltip": "前景点击，使用 KJNodes PointsEditor 格式：[{\"x\": 100, \"y\": 200}]。坐标为输入图像的像素位置。"
+      },
+      "negative_coords": {
+        "name": "负向点击",
+        "tooltip": "背景点击，使用 KJNodes PointsEditor 格式：[{\"x\": 100, \"y\": 200}]。坐标为输入图像的像素位置。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "Alpha",
+        "tooltip": "原图分辨率的连续前景 alpha。"
+      },
+      "1": {
+        "name": "提示 MASK",
+        "tooltip": "提供给精修头的二值提示 MASK。"
+      },
+      "2": {
+        "name": "结果 JSON",
+        "tooltip": "提示模式、图像尺寸和用时；每张输入图像对应一个 JSON 字符串。"
+      }
+    }
+  },
+  "WeVisOneBoxEditor": {
+    "display_name": "WeVisOne · 图片框选",
+    "description": "连接图片后直接拖拽画框；拖动边缘调整大小，Delete 删除选中框。坐标自动映射回原图。",
+    "inputs": {
+      "background": {
+        "name": "图像",
+        "tooltip": "画布中显示的图像；输入批次时显示第一张图像。"
+      },
+      "width": {
+        "name": "画布宽度",
+        "tooltip": "由原生框选组件管理；输出框会按比例换算到原图的真实宽度。"
+      },
+      "height": {
+        "name": "画布高度",
+        "tooltip": "由原生框选组件管理；输出框会按比例换算到原图的真实高度。"
+      },
+      "editor_state": {
+        "name": "框选区域",
+        "tooltip": "在图片上拖拽画一个或多个框；无需填写文字、描述或颜色。"
+      }
+    },
+    "outputs": {
+      "0": {
+        "name": "边界框",
+        "tooltip": "映射到原图像素坐标的原生框；图像批次共用同一组框选区域。"
+      }
+    }
+  }
+}
